@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aurum Heist - Secure Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: #1a1a1a;
+            padding: 20px;
+        }
+        .login-screen {
+            text-align: center;
+        }
+        .chat-screen {
+            display: none;
+        }
+        .message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: #2a2a2a;
+            border-left: 3px solid #444;
+        }
+        .message.lockpick {
+            border-left-color: #ffaa00;
+        }
+        .message.ghost {
+            border-left-color: #00aaff;
+        }
+        .message.driver {
+            border-left-color: #44ff44;
+        }
+        input {
+            padding: 10px;
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #444;
+            border-radius: 5px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background: #555;
+        }
+        .error {
+            color: #ff4444;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- LOGIN SCREEN -->
+        <div class="login-screen" id="loginScreen">
+            <h2>🔒 SECURE CHAT ACCESS</h2>
+            <p>Enter the decryption code to view messages:</p>
+            <input type="text" id="passwordInput" placeholder="Enter numeric code">
+            <button onclick="unlockChat()">UNLOCK CHAT</button>
+            <div class="error" id="errorMsg"></div>
+        </div>
+
+        <!-- CHAT SCREEN (Hidden until unlocked) -->
+        <div class="chat-screen" id="chatScreen">
+            <h2>💬 CREW CHAT - AURUM HEIST</h2>
+            <div class="message lockpick">
+                <strong>THE LOCKPICK:</strong><br>
+                "I've scouted the bank's security. The main vault has a time-lock mechanism, 
+                but there's a service entrance in the sub-basement. Weakest point is the 
+                old pneumatic tube system - been out of service since the 80s."
+            </div>
+
+            <div class="message ghost">
+                <strong>THE GHOST:</strong><br>
+                "Guard shifts change at 18:00 and 06:00. There's a 7-minute window 
+                during shift change where the east corridor is unmonitored. 
+                Also, the security chief takes his dinner break exactly at 19:30."
+            </div>
+
+            <div class="message driver">
+                <strong>THE DRIVER:</strong><br>
+                "Got the van ready - black utility vehicle with false plates. 
+                Best extraction route is through the financial district during 
+                the evening rush hour. Less suspicious in heavy traffic."
+            </div>
+
+            <div class="message lockpick">
+                <strong>THE LOCKPICK:</strong><br>
+                "160808230423231108191823 . Split into pairs. Don't be late - this window won't last."
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // CORRECT PASSWORD - Now it's "meet"
+    const CORRECT_PASSWORD = "meet";
+    
+    function unlockChat() {
+        const password = document.getElementById('passwordInput').value.trim();
+        const errorMsg = document.getElementById('errorMsg');
+        const loginScreen = document.getElementById('loginScreen');
+        const chatScreen = document.getElementById('chatScreen');
+        
+        if (password === CORRECT_PASSWORD) {
+            // Correct password - show chat
+            loginScreen.style.display = 'none';
+            chatScreen.style.display = 'block';
+        } else {
+            // Wrong password - show error
+            errorMsg.textContent = "❌ Incorrect decryption code. Try again.";
+        }
+    }
+
+    // Allow Enter key to unlock
+    document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            unlockChat();
+        }
+    });
+</script>
+</body>
+</html>
+chat.html
+Displaying chat.html.
