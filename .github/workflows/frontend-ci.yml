@@ -33,6 +33,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: 'source code/frontend/package-lock.json'
+
 
       - name: Install dependencies
         working-directory: 'source code/frontend'
