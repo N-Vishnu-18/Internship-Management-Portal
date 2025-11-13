@@ -35,7 +35,6 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'source code/backend/package-lock.json'
 
-
       - name: Install dependencies
         working-directory: 'source code/backend'
         run: npm ci
@@ -44,12 +43,9 @@ jobs:
         working-directory: 'source code/backend'
         run: npm run lint --if-present
 
-      - name: Run unit tests
+      - name: Run unit tests (no tests, safe)
         working-directory: 'source code/backend'
-        env:
-          # Example secret usage: set DB_CONNECTION in repository secrets
-          DB_URL: ${{ secrets.DB_URL }}
-        run: npm test --if-present -- --runInBand
+        run: npm run test --if-present -- --runInBand
 
       - name: Package for artifact (optional)
         if: success()
