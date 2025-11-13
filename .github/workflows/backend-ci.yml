@@ -1,0 +1,65 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - 'source code/backend/**'
+  pull_request:
+    paths:
+      - 'source code/backend/**'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  build:
+    name: Build & Test (backend)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['20.x']
+
+    env:
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        working-directory: 'source code/backend'
+        run: npm ci
+
+      - name: Run lint (if any)
+        working-directory: 'source code/backend'
+        run: npm run lint --if-present
+
+      - name: Run unit tests
+        working-directory: 'source code/backend'
+        env:
+          # Example secret usage: set DB_CONNECTION in repository secrets
+          DB_URL: ${{ secrets.DB_URL }}
+        run: npm test --if-present -- --runInBand
+
+      - name: Package for artifact (optional)
+        if: success()
+        working-directory: 'source code/backend'
+        run: |
+          mkdir -p dist
+          cp -R package.json package-lock.json dist/
+          cp -R src dist/src || true
+
+      - name: Upload backend artifact (optional)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist
+          path: 'source code/backend/dist/**'
