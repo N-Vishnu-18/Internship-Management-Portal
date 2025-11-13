@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: intmnt-backend-svc
+  labels:
+    app: intmnt-backend
+spec:
+  selector:
+    app: intmnt-backend
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80         # external service port
+      targetPort: 5000 # container port
+      # nodePort: 30080 # uncomment if you prefer NodePort and set a specific nodePort

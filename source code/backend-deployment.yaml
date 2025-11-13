@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intmnt-backend
+  labels:
+    app: intmnt-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: intmnt-backend
+  template:
+    metadata:
+      labels:
+        app: intmnt-backend
+    spec:
+      # If your image is private, uncomment imagePullSecrets and create the secret (command below)
+      # imagePullSecrets:
+      #   - name: dockerhub-secret
+      containers:
+        - name: intmnt-backend
+          image: nvishnuvardhan/intmnt:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "5000"
+            # Example of pulling sensitive values from a secret:
+            # - name: MONGO_URI
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: mongo-secret
+            #       key: mongo_uri
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+      restartPolicy: Always
