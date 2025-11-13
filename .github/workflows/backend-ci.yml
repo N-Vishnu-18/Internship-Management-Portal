@@ -45,7 +45,7 @@ jobs:
 
       - name: Run unit tests (no tests, safe)
         working-directory: 'source code/backend'
-        run: npm run test --if-present -- --runInBand
+        run: npm run test --if-present -- --watchAll=false
 
       - name: Package for artifact (optional)
         if: success()
